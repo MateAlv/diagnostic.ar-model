@@ -1,0 +1,13 @@
+md5: 48d63c29cb729d8b905d58c7401b6aa7
+frozen: true
+deps:
+- checksum: '"0x8DE6D80FAD9873B"'
+  size: 35261380
+  hash: md5
+  path: 
+    https://github.com/obophenotype/human-phenotype-ontology/releases/download/v2026-02-16/phenotype.hpoa
+outs:
+- md5: b249dc767256e904d1e92895184009b2
+  size: 35261380
+  hash: md5
+  path: phenotype.hpoa

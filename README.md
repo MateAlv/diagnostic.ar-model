@@ -1,0 +1,49 @@
+# diagnostic.ar-model
+
+Modelos de priorización de genes a partir de fenotipos HPO para diagnostic.ar.
+
+El punto de partida es la red GenPhenia v3.0 (GIN de 3 capas sobre el subgrafo HPO
+del paciente, embeddings BioBERT de 768 dimensiones, 5.229 genes de salida). Sobre su
+salida se agregan módulos de reranking que incorporan información que la red no ve:
+síntomas ausentes, edad y sexo.
+
+## Entorno
+
+```bash
+python3 -m venv .venv
+.venv/bin/pip install -e ".[dev]"
+.venv/bin/dvc pull
+```
+
+## Organización
+
+| Ruta | Contenido | Versionado |
+|---|---|---|
+| `data/raw/` | Datos externos sin modificar, fijados a una versión | DVC (`*.dvc` en git) |
+| `data/processed/` | Tablas derivadas generadas por el pipeline | DVC (salidas de `dvc.yaml`) |
+| `models/` | Checkpoints y artefactos de modelos | DVC |
+| `results/` | Métricas y reportes de cada evaluación | git |
+| `src/diagnostic_ar_model/` | Código | git |
+| `params.yaml` | Todos los hiperparámetros | git |
+
+Los datos de HPO vienen del release `v2026-02-16` y se importaron con
+`dvc import-url`, así que cada `.dvc` guarda la URL de origen y el hash del archivo.
+
+## Versionado de experimentos y resultados
+
+- Todo parámetro que afecte un resultado vive en `params.yaml`. El código no tiene
+  valores fijos de hiperparámetros.
+- El pipeline se define en `dvc.yaml`. `dvc repro` solo recalcula las etapas cuyas
+  dependencias cambiaron.
+- Cada corrida es un experimento de DVC:
+  ```bash
+  dvc exp run -n <nombre> -S reranker.neg_floor=0.1
+  dvc exp show            # tabla de parámetros y métricas de todas las corridas
+  dvc exp push origin <nombre>
+  ```
+  El experimento queda asociado al commit de código, los parámetros, los hashes de
+  los datos y las métricas, así que cualquier resultado se puede reproducir.
+- Las métricas se escriben en `results/` como JSON y se commitean en git, de modo que
+  el historial de resultados se lee sin bajar artefactos.
+- Un experimento que se promueve a versión del modelo se commitea en `main`, se
+  etiqueta `model-vX.Y.Z` y se registra en `CHANGELOG.md` con sus métricas.

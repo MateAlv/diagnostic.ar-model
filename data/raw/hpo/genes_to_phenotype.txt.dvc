@@ -1,0 +1,13 @@
+md5: a0a32bcb37ca433c38442695649c24e0
+frozen: true
+deps:
+- checksum: '"0x8DE6D80F999E364"'
+  size: 20533481
+  hash: md5
+  path: 
+    https://github.com/obophenotype/human-phenotype-ontology/releases/download/v2026-02-16/genes_to_phenotype.txt
+outs:
+- md5: ae3c7ece4e3dfb654f73be8077089727
+  size: 20533481
+  hash: md5
+  path: genes_to_phenotype.txt
