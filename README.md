@@ -47,3 +47,18 @@ Los datos de HPO vienen del release `v2026-02-16` y se importaron con
   el historial de resultados se lee sin bajar artefactos.
 - Un experimento que se promueve a versión del modelo se commitea en `main`, se
   etiqueta `model-vX.Y.Z` y se registra en `CHANGELOG.md` con sus métricas.
+
+## Publicar una versión del modelo
+
+Los checkpoints no viajan en git. Una versión promovida se empaqueta y se adjunta
+a un release de GitHub con su tag:
+
+```bash
+scripts/package_bundle.sh models/base/genphenia-v3.0 dist/
+gh release create model-v3.0.0 dist/genphenia-v3.0.tar.gz dist/genphenia-v3.0.tar.gz.sha256 \
+  --title model-v3.0.0 --notes-file <(sed -n '/^## model-v3.0.0/,/^## /p' CHANGELOG.md | sed '$d')
+```
+
+`diagnostic.ar-api` fija el tag y el sha256 del tarball, y su build lo baja y lo
+verifica. `vendor/genphenia_inference_engine/` es el motor que lo ejecuta; la API
+lleva una copia.
