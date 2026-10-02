@@ -4,3 +4,5 @@ __pycache__/
 .pytest_cache/
 .ipynb_checkpoints/
 .env
+# hpo-embeddings/build.sh output; published as a release, never committed
+hpo-embeddings/dist/

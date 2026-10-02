@@ -1,0 +1,27 @@
+# What the HPO embeddings of the symptom extractor are made from.
+#
+# A merge to main that changes this file publishes release hpo-embeddings-v$VERSION
+# (.github/workflows/publish-hpo-embeddings.yml); no other change does. A
+# published version is never rebuilt: to regenerate, change what needs
+# changing here AND raise VERSION, with its entry in CHANGELOG.md.
+#
+# The extractor (diagnostic.ar-api, services/api-gateway/Dockerfile.recognizer)
+# downloads that release instead of computing the embeddings, and refuses to
+# build when its encoder, its HPO labels or its generator script differ from
+# the ones below. So changing the model means regenerating the embeddings.
+VERSION=1.0.0
+
+# The ClinLinker encoder on Hugging Face, the revision the recognizer was
+# evaluated with on 2026-09-21. The extractor encodes what people write with
+# this same revision at run time.
+CLINLINKER_REPO=ICB-UMA/ClinLinker-KB-GP
+CLINLINKER_REVISION=8f914c58a1cbcff43331eb15b101eaa5e5c6920a
+
+# The Spanish HPO labels (obophenotype/hpo-translations, babelon/hp-es.babelon.tsv).
+HPO_TRANSLATIONS_COMMIT=69f7f96fba5ae4c1b999028991510088f3480487
+
+# generator/hpo_tsv_reader.py is a byte-for-byte copy of the recognizer's
+# script (MateAlv/spanish-symptoms-recognizer, symptoms_recognizer/mapper/),
+# last changed there in this commit. build.sh refuses a copy with another hash.
+GENERATOR_SOURCE_COMMIT=ad5674b619922c8498a1ab54128618cd7a287165
+GENERATOR_SHA256=7fd1940df240519161d2078d7f23313db4473019f7a6b1116abbcba566499c4c

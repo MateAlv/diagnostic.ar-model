@@ -1,0 +1,74 @@
+name: Publish HPO embeddings
+
+# Publishes release hpo-embeddings-v<VERSION> when a merge to main changes
+# hpo-embeddings/embeddings.lock, and only then: no other merge starts it.
+# A version already published is never rebuilt; to regenerate, raise VERSION
+# in the lock (and add its CHANGELOG entry) in a pull request.
+#
+# The symptom extractor (diagnostic.ar-api) downloads this release instead of
+# computing the embeddings on every build; see README.md, "Embeddings de HPO".
+# Only this repository's own token is used.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - hpo-embeddings/embeddings.lock
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-hpo-embeddings
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: version
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          # shellcheck source=/dev/null
+          . hpo-embeddings/embeddings.lock
+          tag="hpo-embeddings-v$VERSION"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          if gh release view "$tag" -R "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "::notice::$tag is already published; raise VERSION in embeddings.lock to publish another."
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          # The release notes are the version's CHANGELOG entry: no entry, no release.
+          sed -n "/^## $tag/,/^## /p" CHANGELOG.md | sed '$d' > "$RUNNER_TEMP/notes.md"
+          if [ ! -s "$RUNNER_TEMP/notes.md" ]; then
+            echo "::error::CHANGELOG.md has no '## $tag' entry."
+            exit 1
+          fi
+          echo "publish=true" >> "$GITHUB_OUTPUT"
+
+      - if: steps.version.outputs.publish == 'true'
+        uses: docker/setup-buildx-action@v3
+
+      - name: Generate the embeddings
+        if: steps.version.outputs.publish == 'true'
+        run: hpo-embeddings/build.sh
+
+      - name: Publish the release
+        if: steps.version.outputs.publish == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          gh release create "$TAG" \
+            hpo-embeddings/dist/hpo-embeddings-clinlinker-kb-gp.tar.gz \
+            hpo-embeddings/dist/hpo-embeddings-clinlinker-kb-gp.tar.gz.sha256 \
+            hpo-embeddings/dist/manifest.json \
+            --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
+            --title "$TAG" --notes-file "$RUNNER_TEMP/notes.md" --latest=false
+          echo "### $TAG" >> "$GITHUB_STEP_SUMMARY"
+          echo "sha256 \`$(cut -d' ' -f1 hpo-embeddings/dist/hpo-embeddings-clinlinker-kb-gp.tar.gz.sha256)\`" >> "$GITHUB_STEP_SUMMARY"
