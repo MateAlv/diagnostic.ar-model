@@ -86,8 +86,9 @@ merge lo dispara, y una versión ya publicada no se vuelve a generar.
 **Para regenerarlos** (otro ClinLinker, otra lista HPO, otro generador): en un pull
 request, cambiar lo que corresponda en el lock, subir `VERSION`, agregar su entrada
 al CHANGELOG y, si cambió el script, copiarlo de nuevo y actualizar
-`GENERATOR_SOURCE_COMMIT` y `GENERATOR_SHA256`. Después, fijar el tag y el sha256
-nuevos en `diagnostic.ar-api`. El extractor se niega a construir si su encoder, sus
+`GENERATOR_SOURCE_COMMIT` y `GENERATOR_SHA256`. En `diagnostic.ar-api`, fijar el tag
+nuevo en `services/api-gateway/embeddings.lock` (el hash lo toma del `.sha256` que
+publica el release, así que ese PR puede ir junto con este, mergeado después). El extractor se niega a construir si su encoder, sus
 etiquetas o su generador no coinciden con los del paquete, así que el modelo y sus
 embeddings no pueden quedar desfasados.
 
