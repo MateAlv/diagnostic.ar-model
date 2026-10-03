@@ -2,9 +2,10 @@
 
 Cada versión publicada del modelo lleva un tag `model-vX.Y.Z`, y cada re-ranker un
 tag `rerank-vX.Y.Z`, con una entrada acá con las métricas de evaluación y el
-experimento del que sale.
+experimento del que sale. Los embeddings de HPO del extractor de síntomas llevan su
+propio tag, `hpo-embeddings-vX.Y.Z` (ver README).
 
-## rerank-v1.0.0 — sin publicar
+## rerank-v1.0.0 — 2026-10-03
 
 rr-v1[neg=0.5]: re-ordena la salida de `model-v3.0.0` penalizando los genes que
 anotan los términos HPO que el paciente no tiene. Sexo, edad y edad de inicio
@@ -31,10 +32,6 @@ bit a bit. Nota de release: [docs/rerank-v1.0.0.md](docs/rerank-v1.0.0.md).
 - Latencia en R1-dev: p95 de 6,77 ms por caso sobre v3.0.
 - Límite: la ganancia se midió en entrevistas simuladas. No se afirma nada
   sobre sexo, edad ni edad de inicio.
-
-Cada versión publicada del modelo lleva un tag `model-vX.Y.Z` y una entrada acá con
-las métricas de evaluación y el experimento del que sale. Los embeddings de HPO del
-extractor de síntomas llevan su propio tag, `hpo-embeddings-vX.Y.Z` (ver README).
 
 ## hpo-embeddings-v1.0.0
 
