@@ -63,6 +63,30 @@ gh release create model-v3.0.0 dist/genphenia-v3.0.tar.gz dist/genphenia-v3.0.ta
 verifica. `vendor/genphenia_inference_engine/` es el motor que lo ejecuta; la API
 lleva una copia.
 
+## Re-ranker
+
+`src/diagnostic_ar_model/rerank/` re-ordena la distribución de v3.0 con los
+términos HPO que el paciente no tiene (rr-v1[neg=0.5]). Las negaciones son
+opcionales: sin ellas devuelve la salida de v3.0 sin tocarla. Qué hace, con qué
+evidencia y cómo se habilita está en [docs/rerank-v1.0.0.md](docs/rerank-v1.0.0.md),
+y lo que tendría que cambiar la app en
+[docs/integracion-app-rerank-v1.md](docs/integracion-app-rerank-v1.md).
+
+Su bundle (`models/rerank/rerank-v1.0/`) guarda en git solo `rerank.json` y el
+manifiesto de origen del KB. Los archivos grandes se bajan y se verifican con:
+
+```bash
+scripts/build_rerank_bundle.sh models/rerank/rerank-v1.0
+scripts/package_bundle.sh models/rerank/rerank-v1.0 dist/
+```
+
+Los tests corren con `.venv/bin/pip install -e ".[test]"` y `.venv/bin/pytest`.
+Los que necesitan v3.0 buscan el bundle descomprimido en
+`models/base/genphenia-v3.0`, o donde indique `DXM_GENPHENIA_BUNDLE`, y se saltean
+si no está. La paridad con diagnostic.ar-training usa 50 casos de R1-dev
+(`tests/fixtures/`, armados con `scripts/make_rerank_parity_fixture.py`). Con
+`DXM_PARITY_CASES` corre sobre otro conjunto de casos.
+
 ## Embeddings de HPO del extractor
 
 El extractor de síntomas (spanish-symptoms-recognizer, dentro de la imagen que arma

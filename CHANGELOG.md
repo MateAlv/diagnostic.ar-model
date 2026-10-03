@@ -1,8 +1,37 @@
 # Changelog
 
-Cada versión publicada del modelo lleva un tag `model-vX.Y.Z` y una entrada acá con
-las métricas de evaluación y el experimento del que sale. Los embeddings de HPO del
-extractor de síntomas llevan su propio tag, `hpo-embeddings-vX.Y.Z` (ver README).
+Cada versión publicada del modelo lleva un tag `model-vX.Y.Z`, y cada re-ranker un
+tag `rerank-vX.Y.Z`, con una entrada acá con las métricas de evaluación y el
+experimento del que sale. Los embeddings de HPO del extractor de síntomas llevan su
+propio tag, `hpo-embeddings-vX.Y.Z` (ver README).
+
+## rerank-v1.0.0 — 2026-10-03
+
+rr-v1[neg=0.5]: re-ordena la salida de `model-v3.0.0` penalizando los genes que
+anotan los términos HPO que el paciente no tiene. Sexo, edad y edad de inicio
+tienen peso 0. Las negaciones son opcionales: sin ellas la salida es la de v3.0
+bit a bit. Nota de release: [docs/rerank-v1.0.0.md](docs/rerank-v1.0.0.md).
+
+- Asset del release: `rerank-v1.0.tar.gz`, sha256
+  `4b83f5e39e003aca2dde834948392800655102199f8af099985191b69f8e79e2`. Se arma
+  con `scripts/build_rerank_bundle.sh` y `scripts/package_bundle.sh`, y es
+  reproducible.
+- Conocimiento: `kb-v3` de diagnostic.ar-training, sin cambios, sha256
+  `39d5f9213afab40090d15bdace663dc94d650b099e6b13643ced0633f4970fa8`. Su
+  manifiesto de origen viaja en el bundle. La ontología es HPO 2026-02-16,
+  sha256 `cb3b756ac11d1308372136bf4f7f8db2ad1c51f64a795e09400e5ffb2a273243`.
+- Código: `src/diagnostic_ar_model/rerank/`, copiado de
+  diagnostic.ar-training@9a573fd, con la procedencia en cada archivo.
+- Evidencia: EXP-B-003, el gate sellado de la Fase 4.
+  - S3-test: Δ MRR +0,0044 [+0,0032, +0,0057] vs v3.0 con las respuestas "sí";
+    perjudica al 3,9 %.
+  - R1-test: sin regresión, Δ −0,0025 [−0,0070, +0,0013]; sin negaciones,
+    Δ exactamente 0.
+- Paridad: en los 1.680 casos puntuables de R1-dev, los ranks son idénticos a
+  los de `dxt rerank eval` (EXP-B-003).
+- Latencia en R1-dev: p95 de 6,77 ms por caso sobre v3.0.
+- Límite: la ganancia se midió en entrevistas simuladas. No se afirma nada
+  sobre sexo, edad ni edad de inicio.
 
 ## hpo-embeddings-v1.0.0
 

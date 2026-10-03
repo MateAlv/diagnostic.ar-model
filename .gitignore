@@ -4,5 +4,7 @@ __pycache__/
 .pytest_cache/
 .ipynb_checkpoints/
 .env
+models/rerank/*/kb.json.gz
+models/rerank/*/hp.json
 # hpo-embeddings/build.sh output; published as a release, never committed
 hpo-embeddings/dist/
