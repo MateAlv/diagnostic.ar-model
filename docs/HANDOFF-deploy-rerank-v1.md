@@ -37,7 +37,7 @@ Hay que tenerlos en cuenta para decidir el rollout.
 | # | Paso | Repo o lugar | Responsable |
 |---|---|---|---|
 | 1 | API: fijar el bundle, aceptar `excluded_hpo_ids` (opcional) y re-rankear la distribución completa antes del top-k. Ver la sección 1 de la integración | MateAlv/diagnostic.ar-api, `services/genphenai` | Quien despliega, con PR revisado por el equipo |
-| 2 | Agente: mandar las respuestas "no" efectivas como `excluded_hpo_ids`. Revierte D-18 | MarBL00126/diagnosticar-question-agent | **Mariano** (su repo) |
+| 2 | Agente: mandar las respuestas "no" efectivas como `excluded_hpo_ids`. Revierte D-18. **Hecho:** PR https://github.com/MarBL00126/diagnosticar-question-agent/pull/1 (`feat/rerank-negaciones` sobre `feat/agente-v2`). La flag es `PREGUNTAS_RERANK_NEGATIONS` y viene activada: la API actual ignora campos desconocidos (`RankRequest` es un `BaseModel` sin `extra`), así que no rompe nada antes de que se actualice | MarBL00126/diagnosticar-question-agent | Falta que Mariano revise el PR y lo mergee |
 | 3 | Web: subir `QUESTION_AGENT_COMMIT` al commit del agente con el paso 2. Nada más cambia | MateAlv/diagnostic.ar, `.github/question-agent.env` | Equipo |
 | 4 | Staging: desplegar con `MODEL_ROUTED=true`, que ya corre la imagen fijada por `model.lock`, y hacer las verificaciones | staging | Quien despliega |
 | 5 | Producción: hoy `/genphenai` va por túnel a brainy (`docker-compose.prod.yml:75-93`). Hay que **(a)** enrutar producción a la imagen fijada, como staging, o **(b)** actualizar el servicio de brainy para que cargue el bundle y acepte el campo | nodo0 / brainy | Quien despliega, con OK de Mateo |
@@ -66,7 +66,9 @@ El paso 2 da datos de uso real sin riesgo.
       re-rankeada.
 - [ ] Latencia: el p95 del endpoint sube como mucho unos 10 ms.
 - [ ] El agente no manda negaciones del texto ni "No sé" (revisar los logs de
-      una sesión de prueba).
+      una sesión de prueba). El PR #1 del agente ya lo testea.
+- [ ] Con la API actualizada, la respuesta trae `rerank`, y solo entonces el
+      agente le dice al usuario que los "no" mueven la lista.
 
 ## Vuelta atrás
 - **Inmediata, sin redeploy:** el agente deja de mandar `excluded_hpo_ids`. La
@@ -86,6 +88,6 @@ El paso 2 da datos de uso real sin riesgo.
 1. Producción: ¿opción (a), enrutar a la imagen fijada, u opción (b),
    actualizar brainy?
 2. ¿Modo sombra antes de activar? Se recomienda que sí.
-3. Mariano: aceptar revertir D-18 y actualizar `docs/NEGACIONES.md`.
+3. Mariano: revisar el PR #1 del agente. Revierte D-18 y deja una nota fechada en `docs/NEGACIONES.md`. Hay un punto abierto ahí: si también se bloquean los ancestros de un "no" anterior.
 4. Producto: ¿la lista "Con tus respuestas" muestra el orden re-rankeado por
    defecto (`preferAnswersList`)? Hoy está apagada.
