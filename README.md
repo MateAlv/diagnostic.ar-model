@@ -72,7 +72,8 @@ evidencia y cómo se habilita está en [docs/rerank-v1.0.0.md](docs/rerank-v1.0.
 y lo que tendría que cambiar la app en
 [docs/integracion-app-rerank-v1.md](docs/integracion-app-rerank-v1.md).
 
-`rerank-v1.1` suma la edad de inicio (opcional): ver
+`rerank-v1.1` suma la edad de inicio (opcional) y **no está publicado** (decisión del
+2026-10-05: quedó por debajo de E0 en el vault de R1; se conserva como registro): ver
 [docs/rerank-v1.1.0.md](docs/rerank-v1.1.0.md). Su bundle es
 `models/rerank/rerank-v1.1/` y se arma igual. La paridad con la edad de inicio
 usa `tests/fixtures/rerank-v1.1-onset-parity.json`, armado con
