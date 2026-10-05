@@ -7,8 +7,9 @@ propio tag, `hpo-embeddings-vX.Y.Z` (ver README).
 
 ## rerank-v1.1.0 — no publicado (2026-10-05)
 
-No se publica, por decisión de Mateo del 2026-10-05: quedó por debajo de E0 en el
-vault de R1 (EXP-V-001, −0,0031 [−0,0055, −0,0005]). Nunca tuvo tag. Se conserva
+No publicado (2026-10-05), por decisión de Mateo. Bóveda R1, MRR: v1.1 0,4106,
+v1.0 0,4114, E0 0,4136 (EXP-V-001, descriptivo, n = 1.771); v1.1 vs E0 −0,0031
+[−0,0055, −0,0005]. Nunca tuvo tag. Se conserva
 como registro; ver el estado en [docs/rerank-v1.1.0.md](docs/rerank-v1.1.0.md).
 La entrada de abajo es el candidato tal como se armó.
 
@@ -23,8 +24,8 @@ bit. Nota de release: [docs/rerank-v1.1.0.md](docs/rerank-v1.1.0.md).
   edad de inicio en `rerank/knowledge.py` y `rerank/model.py`, copiados de
   diagnostic.ar-training@5970d8d.
 - Evidencia: EXP-B-006, gate PASA. R1-test: candidato − rr-v1 −0,0003
-  [−0,0019, +0,0008], sin ganancia medible en pacientes reales. La ganancia es
-  simulada: S3-v3b-dev +0,0021 [+0,0007, +0,0035].
+  [−0,0019, +0,0008] (n = 2.548). En simulación: S3-v3b-dev +0,0021
+  [+0,0007, +0,0035].
 - Paridad con el candidato de diagnostic.ar-training a 1e-9; identidad con
   v1.0.0 sin edad de inicio.
 
@@ -53,8 +54,12 @@ bit a bit. Nota de release: [docs/rerank-v1.0.0.md](docs/rerank-v1.0.0.md).
 - Paridad: en los 1.680 casos puntuables de R1-dev, los ranks son idénticos a
   los de `dxt rerank eval` (EXP-B-003).
 - Latencia en R1-dev: p95 de 6,77 ms por caso sobre v3.0.
-- Límite: la ganancia se midió en entrevistas simuladas. No se afirma nada
-  sobre sexo, edad ni edad de inicio.
+- Alcance de la medición: entrevistas simuladas (S3). Sexo, edad y edad de inicio
+  tienen peso 0 en esta versión.
+- Limitaciones de datos: no hay pacientes reales con respuestas sí/no de entrevista
+  (R1 tiene negativos de publicaciones), así que `rerank-v1.0.0` (re-ranking por
+  síntomas ausentes) queda solo en staging hasta que haya sesiones reales con
+  diagnóstico confirmado; Q2b, en cambio, va a producción; ver el README.
 
 ## hpo-embeddings-v1.0.0
 
