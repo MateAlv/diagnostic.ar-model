@@ -1,5 +1,8 @@
 # HANDOFF: desplegar rerank-v1.0.0 (nodo0 / brainy)
 
+> **2026-10-05:** el orden de pasos vigente y las decisiones de Mateo están en
+> `HANDOFF-deploy-staging-rerank-q2b.md` (por ahora solo staging, con el agente Q2b).
+
 Para el agente o la persona a cargo del despliegue en nodo0/brainy. Se puede
 seguir sin otro contexto. Fecha: 2026-10-03.
 
