@@ -1,0 +1,39 @@
+{
+  "name": "rr-v1[neg=0.5,onset=0.25]",
+  "release": "rerank-v1.1.0",
+  "base_model": {
+    "release": "model-v3.0.0",
+    "asset": "genphenia-v3.0.tar.gz",
+    "sha256": "2201b7f2868afaf00439f76a6197bcf1d94eccc5ea171173719ca48c517a61c8"
+  },
+  "weights": {
+    "neg": 0.5,
+    "sex": 0.0,
+    "age": 0.0,
+    "onset": 0.25
+  },
+  "params": {
+    "neg_strength": 0.5,
+    "unknown_frequency": 0.3,
+    "onset_smoothing": 0.1,
+    "top_k": 200
+  },
+  "files": {
+    "kb.json.gz": {
+      "artifact_id": "kb-v3",
+      "sha256": "39d5f9213afab40090d15bdace663dc94d650b099e6b13643ced0633f4970fa8",
+      "source": "https://github.com/MateAlv/diagnostic.ar-training/releases/download/kb-v3/kb.json.gz",
+      "manifest": "kb-v3.manifest.json"
+    },
+    "hp.json": {
+      "artifact_id": "source:hpo_ontology@2026-02-16",
+      "sha256": "cb3b756ac11d1308372136bf4f7f8db2ad1c51f64a795e09400e5ffb2a273243",
+      "source": "https://github.com/obophenotype/human-phenotype-ontology/releases/download/v2026-02-16/hp.json"
+    }
+  },
+  "evidence": "MateAlv/diagnostic.ar-training docs/experiments/EXP-B-006.md",
+  "code": {
+    "repo": "https://github.com/MateAlv/diagnostic.ar-training.git",
+    "commit": "5970d8dd674d982646ff3d1f15f66434c49ce8c5"
+  }
+}

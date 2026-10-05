@@ -72,6 +72,12 @@ evidencia y cómo se habilita está en [docs/rerank-v1.0.0.md](docs/rerank-v1.0.
 y lo que tendría que cambiar la app en
 [docs/integracion-app-rerank-v1.md](docs/integracion-app-rerank-v1.md).
 
+`rerank-v1.1` suma la edad de inicio (opcional): ver
+[docs/rerank-v1.1.0.md](docs/rerank-v1.1.0.md). Su bundle es
+`models/rerank/rerank-v1.1/` y se arma igual. La paridad con la edad de inicio
+usa `tests/fixtures/rerank-v1.1-onset-parity.json`, armado con
+`scripts/make_rerank_onset_parity_fixture.py`.
+
 Su bundle (`models/rerank/rerank-v1.0/`) guarda en git solo `rerank.json` y el
 manifiesto de origen del KB. Los archivos grandes se bajan y se verifican con:
 
