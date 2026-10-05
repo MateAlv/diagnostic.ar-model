@@ -5,7 +5,12 @@ tag `rerank-vX.Y.Z`, con una entrada acá con las métricas de evaluación y el
 experimento del que sale. Los embeddings de HPO del extractor de síntomas llevan su
 propio tag, `hpo-embeddings-vX.Y.Z` (ver README).
 
-## rerank-v1.1.0 — pendiente del tag
+## rerank-v1.1.0 — no publicado (2026-10-05)
+
+No se publica, por decisión de Mateo del 2026-10-05: quedó por debajo de E0 en el
+vault de R1 (EXP-V-001, −0,0031 [−0,0055, −0,0005]). Nunca tuvo tag. Se conserva
+como registro; ver el estado en [docs/rerank-v1.1.0.md](docs/rerank-v1.1.0.md).
+La entrada de abajo es el candidato tal como se armó.
 
 rr-v1 + edad de inicio: a `rerank-v1.0.0` le suma `0,25 · onset_llr`. La edad de
 inicio es opcional, en años; sin ella la salida es la de `rerank-v1.0.0` bit a

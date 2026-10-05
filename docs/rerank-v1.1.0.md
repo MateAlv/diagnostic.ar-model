@@ -1,9 +1,17 @@
+> **Estado, 2026-10-05: no se publica (decisión de Mateo).** Quedó por debajo de E0
+> en el vault de R1 (EXP-V-001: v1.1 vs E0 −0,0031 [−0,0055, −0,0005]), así que no
+> se crea el tag ni el release. Se mantiene en el repo como registro: el código, el
+> bundle y los tests están mergeados (PR #7) y siguen valiendo para reproducir el
+> experimento. En staging corre `rerank-v1.0.0`. Contexto de esa medición: E0 está
+> favorecido en R1 (se entrenó con anotaciones de las mismas publicaciones) y los
+> términos excluidos de R1 son negativos de publicaciones, no respuestas "no" de
+> una entrevista.
+
 # rerank-v1.1.0: rr-v1 + edad de inicio
 
 Nota de release del segundo re-ranker sobre GenPhenia v3.0 (`model-v3.0.0`).
-Candidato a release: el tag y el release de GitHub se crean solo con el OK
-explícito de Mateo. Mateo aprobó el release el 2026-10-05, después de que
-EXP-B-006 pasara su gate.
+Candidato que no se publicó (ver el estado arriba). Pasó el gate de EXP-B-006
+(sin regresión en R1-test), pero el vault de R1 lo midió por debajo de E0.
 
 ## Qué hace
 

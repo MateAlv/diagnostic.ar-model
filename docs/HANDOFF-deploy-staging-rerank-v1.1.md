@@ -1,3 +1,7 @@
+> **NO EJECUTAR. Este handoff quedó sin efecto (Mateo, 2026-10-05).** `rerank-v1.1.0` no se
+> publica: nunca tuvo tag ni release, porque quedó por debajo de E0 en el vault de R1
+> (EXP-V-001). En staging queda `rerank-v1.0.0` con Q2b. Se conserva solo como registro.
+
 # HANDOFF: rerank-v1.1.0 (edad de inicio) en staging
 
 Para el agente que despliega en nodo0. Fecha: 2026-10-05. Continúa
