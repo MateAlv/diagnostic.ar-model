@@ -5,6 +5,24 @@ tag `rerank-vX.Y.Z`, con una entrada acá con las métricas de evaluación y el
 experimento del que sale. Los embeddings de HPO del extractor de síntomas llevan su
 propio tag, `hpo-embeddings-vX.Y.Z` (ver README).
 
+## rerank-v1.1.0 — pendiente del tag
+
+rr-v1 + edad de inicio: a `rerank-v1.0.0` le suma `0,25 · onset_llr`. La edad de
+inicio es opcional, en años; sin ella la salida es la de `rerank-v1.0.0` bit a
+bit. Nota de release: [docs/rerank-v1.1.0.md](docs/rerank-v1.1.0.md).
+
+- Asset: `rerank-v1.1.tar.gz`, sha256
+  `cf4cc0d28b7a391bea5df21fbdb00f8c9af85d626e5b22e9919ab6dc58e515a3`. Mismo
+  `kb-v3` y mismo `hp.json` que v1.0.0.
+- Código: `rerank/onset.py` (de los campos de la web a años) y el término de
+  edad de inicio en `rerank/knowledge.py` y `rerank/model.py`, copiados de
+  diagnostic.ar-training@5970d8d.
+- Evidencia: EXP-B-006, gate PASA. R1-test: candidato − rr-v1 −0,0003
+  [−0,0019, +0,0008], sin ganancia medible en pacientes reales. La ganancia es
+  simulada: S3-v3b-dev +0,0021 [+0,0007, +0,0035].
+- Paridad con el candidato de diagnostic.ar-training a 1e-9; identidad con
+  v1.0.0 sin edad de inicio.
+
 ## rerank-v1.0.0 — 2026-10-03
 
 rr-v1[neg=0.5]: re-ordena la salida de `model-v3.0.0` penalizando los genes que

@@ -8,3 +8,6 @@ models/rerank/*/kb.json.gz
 models/rerank/*/hp.json
 # hpo-embeddings/build.sh output; published as a release, never committed
 hpo-embeddings/dist/
+
+# release tarballs built by scripts/package_bundle.sh; published as release assets, never committed
+/dist/

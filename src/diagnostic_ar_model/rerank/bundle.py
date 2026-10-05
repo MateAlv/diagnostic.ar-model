@@ -12,6 +12,8 @@ from diagnostic_ar_model.rerank.model import ReRanker
 CONFIG = "rerank.json"
 KB = "kb.json.gz"
 ONTOLOGY = "hp.json"
+V1_1_WEIGHTS = {"neg": 0.5, "sex": 0.0, "age": 0.0, "onset": 0.25}
+DEFAULT_ONSET_SMOOTHING = 0.1
 
 
 def sha256_file(path: Path) -> str:
@@ -34,9 +36,14 @@ def verify(bundle_dir: Path) -> dict:
         actual = sha256_file(bundle_dir / name)
         if actual != entry["sha256"]:
             raise ValueError(f"{bundle_dir / name}: sha256 {actual}, expected {entry['sha256']}")
-    unsupported = {f: w for f, w in config["weights"].items() if f != "neg" and w != 0}
-    if unsupported:
-        raise ValueError(f"this module implements the negation feature only, got weights {unsupported}")
+    weights = config["weights"]
+    if weights.get("onset", 0) != 0:
+        if weights != V1_1_WEIGHTS:
+            raise ValueError(f"the only onset weights this module implements are {V1_1_WEIGHTS}, got {weights}")
+    else:
+        unsupported = {f: w for f, w in weights.items() if f != "neg" and w != 0}
+        if unsupported:
+            raise ValueError(f"unsupported weights {unsupported}: only negation, or rerank-v1.1's onset")
     return config
 
 
@@ -50,6 +57,16 @@ def load(bundle_dir: Path, genes: Sequence[str]) -> ReRanker:
     knowledge = GeneKnowledge(
         kb,
         Ontology.from_json(bundle_dir / ONTOLOGY),
-        FeatureParams(neg_strength=params["neg_strength"], unknown_frequency=params["unknown_frequency"]),
+        FeatureParams(
+            neg_strength=params["neg_strength"],
+            unknown_frequency=params["unknown_frequency"],
+            onset_smoothing=params.get("onset_smoothing", DEFAULT_ONSET_SMOOTHING),
+        ),
     )
-    return ReRanker(knowledge, genes, neg_weight=config["weights"]["neg"], top_k=params["top_k"])
+    return ReRanker(
+        knowledge,
+        genes,
+        neg_weight=config["weights"]["neg"],
+        top_k=params["top_k"],
+        onset_weight=config["weights"].get("onset", 0.0),
+    )

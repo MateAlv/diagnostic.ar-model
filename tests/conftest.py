@@ -4,6 +4,8 @@
   since the engine writes its state/ there. Default models/base/genphenia-v3.0.
 - DXM_RERANK_BUNDLE: a filled re-ranker bundle (scripts/build_rerank_bundle.sh).
   Default models/rerank/rerank-v1.0.
+- DXM_RERANK_V11_BUNDLE: the same for rerank-v1.1. Default models/rerank/rerank-v1.1.
+- DXM_ONSET_PARITY_CASES: the onset parity cases. Default tests/fixtures/rerank-v1.1-onset-parity.json.
 - DXM_PARITY_CASES: the parity cases. Default tests/fixtures/r1-dev-parity-sample.json.
 """
 
@@ -22,6 +24,10 @@ from diagnostic_ar_model.rerank.bundle import CONFIG, KB, ONTOLOGY
 REPO = Path(__file__).resolve().parents[1]
 GENPHENIA_BUNDLE = Path(os.environ.get("DXM_GENPHENIA_BUNDLE", REPO / "models/base/genphenia-v3.0"))
 RERANK_BUNDLE = Path(os.environ.get("DXM_RERANK_BUNDLE", REPO / "models/rerank/rerank-v1.0"))
+RERANK_V11_BUNDLE = Path(os.environ.get("DXM_RERANK_V11_BUNDLE", REPO / "models/rerank/rerank-v1.1"))
+ONSET_PARITY_CASES = Path(
+    os.environ.get("DXM_ONSET_PARITY_CASES", REPO / "tests/fixtures/rerank-v1.1-onset-parity.json")
+)
 PARITY_CASES = Path(os.environ.get("DXM_PARITY_CASES", REPO / "tests/fixtures/r1-dev-parity-sample.json"))
 
 
@@ -81,6 +87,18 @@ def reranker(v3):
     if not all((RERANK_BUNDLE / f).is_file() for f in (CONFIG, KB, ONTOLOGY)):
         pytest.skip(f"no filled re-ranker bundle at {RERANK_BUNDLE}")
     return rerank.load(RERANK_BUNDLE, v3.genes)
+
+
+@pytest.fixture(scope="session")
+def reranker_v11(v3):
+    if not all((RERANK_V11_BUNDLE / f).is_file() for f in (CONFIG, KB, ONTOLOGY)):
+        pytest.skip(f"no filled rerank-v1.1 bundle at {RERANK_V11_BUNDLE}")
+    return rerank.load(RERANK_V11_BUNDLE, v3.genes)
+
+
+@pytest.fixture(scope="session")
+def onset_parity() -> dict:
+    return json.loads(ONSET_PARITY_CASES.read_text())
 
 
 @pytest.fixture(scope="session")
