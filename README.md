@@ -73,11 +73,24 @@ y lo que tendría que cambiar la app en
 [docs/integracion-app-rerank-v1.md](docs/integracion-app-rerank-v1.md).
 
 `rerank-v1.1` suma la edad de inicio (opcional) y **no está publicado** (decisión del
-2026-10-05: quedó por debajo de E0 en el vault de R1; se conserva como registro): ver
+2026-10-05). Bóveda R1, MRR: v1.1 0,4106, v1.0 0,4114, E0 0,4136 (EXP-V-001, descriptivo,
+n = 1.771); se conserva como registro: ver
 [docs/rerank-v1.1.0.md](docs/rerank-v1.1.0.md). Su bundle es
 `models/rerank/rerank-v1.1/` y se arma igual. La paridad con la edad de inicio
 usa `tests/fixtures/rerank-v1.1-onset-parity.json`, armado con
 `scripts/make_rerank_onset_parity_fixture.py`.
+
+Q2b (selección de preguntas del agente) va a producción. El re-ranking por síntomas ausentes (`rerank-v1.0.0`, las respuestas "no") queda solo en staging, por la limitación de datos del primer punto. Limitaciones de datos:
+- No existe un conjunto de pacientes reales con respuestas sí/no de entrevista; R1 solo
+  tiene negativos escritos en publicaciones, que no son lo mismo que los "no" del agente.
+  El efecto de las negaciones de entrevista se estima solo en simulación (S3, EXP-B-003:
+  +0,0044 [+0,0032, +0,0057]). La promoción espera sesiones reales (respuestas de
+  entrevista más diagnóstico confirmado).
+- La edad de inicio de la literatura cubre parte de las entidades (S3 v2: 1.027 casos,
+  5,25 %; S3 v3: 120 genes elegibles), así que su efecto se simuló sobre ese subconjunto.
+- E0 está favorecido en R1 (se entrenó con anotaciones que derivan en parte de las mismas
+  publicaciones), por lo que las comparaciones contra E0 en pacientes reales son conservadoras.
+- Trabajo futuro: reunir sesiones reales con consentimiento en la plataforma.
 
 Su bundle (`models/rerank/rerank-v1.0/`) guarda en git solo `rerank.json` y el
 manifiesto de origen del KB. Los archivos grandes se bajan y se verifican con:
