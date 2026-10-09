@@ -107,6 +107,24 @@ si no está. La paridad con diagnostic.ar-training usa 50 casos de R1-dev
 (`tests/fixtures/`, armados con `scripts/make_rerank_parity_fixture.py`). Con
 `DXM_PARITY_CASES` corre sobre otro conjunto de casos.
 
+## ft-v1.1
+
+`src/diagnostic_ar_model/ft/` aplica ft-v1.1-confirmed, el modelo de la Fase 2 de
+diagnostic.ar-training: un residuo sobre los logits de v3.0 que solo baja genes,
+según el sexo, la edad de inicio (o la edad) y los términos excluidos. Sin esos
+datos, o con `FT_V11_ENABLED` apagado (el default), devuelve la salida de v3.0
+sin tocarla. El paquete está en `models/ft/ft-v1.1-confirmed/`, fijado por sha256
+en `ft.json`. Qué hace, con qué evidencia y sus límites: [docs/ft-v1.1.md](docs/ft-v1.1.md).
+Para producción: [docs/HANDOFF-deploy-prod-ft-v1.1.md](docs/HANDOFF-deploy-prod-ft-v1.1.md).
+
+```bash
+scripts/package_ft.sh dist/   # el tarball del release ft-v1.1.0
+```
+
+Sus tests (`tests/test_ft.py`) corren con el fixture de paridad commiteado; los
+que usan el motor de `vendor/` necesitan `models/base/genphenia-v3.0`, que la CI
+baja del release `model-v3.0.0`.
+
 ## Embeddings de HPO del extractor
 
 El extractor de síntomas (spanish-symptoms-recognizer, dentro de la imagen que arma
