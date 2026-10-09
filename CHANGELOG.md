@@ -1,9 +1,31 @@
 # Changelog
 
 Cada versión publicada del modelo lleva un tag `model-vX.Y.Z`, y cada re-ranker un
-tag `rerank-vX.Y.Z`, con una entrada acá con las métricas de evaluación y el
+tag `rerank-vX.Y.Z` y cada residuo de la Fase 2 un tag `ft-vX.Y.Z`, con una entrada acá con las métricas de evaluación y el
 experimento del que sale. Los embeddings de HPO del extractor de síntomas llevan su
 propio tag, `hpo-embeddings-vX.Y.Z` (ver README).
+
+## ft-v1.1.0 — 2026-10-09
+
+ft-v1.1-confirmed: `model-v3.0.0` más un residuo sobre sus logits que solo baja
+genes, por sexo, edad de inicio (o edad) y términos excluidos. Todos los datos son
+opcionales: sin ellos, o con `FT_V11_ENABLED` apagado, la salida es la de v3.0 bit
+a bit. Nota de release: [docs/ft-v1.1.md](docs/ft-v1.1.md).
+
+- Asset: `ft-v1.1-confirmed.tar.gz`, sha256
+  `1ff0130b793847dfb2a188c533b94c7047e3fc5875d48b0eed21c96319f27bc6`
+  (`scripts/package_ft.sh`). Lleva `ft.json`, `ft_prod.py` y el bundle.
+- Archivos: `models/ft/ft-v1.1-confirmed/`, de diagnostic.ar-training@0b189f7
+  (`dist/ft-v1.1-confirmed/`), sin cambios. sha256 de `ft_prod.py`
+  `054893684cfda65d7ddbc835f5c1baa45bb159690e98ca14bf192e2ebaaea63d`, del bundle
+  `6bb6bb40d85a815c3bf8fb467cbfa9c32d34164ced280eb96d4f4228ddeee6c4`.
+- Evidencia: ADR-0018. EXP-P-005 +0,00138 [+0,00070, +0,00232] (n = 3.587,
+  6 perjudicados); EXP-P-006 +0,00054 [+0,00005, +0,00129] (n = 1.072).
+- Paridad con el fixture (207 casos): máximo |Δp| 1,5e-20 desde logits y
+  5,6e-16 desde probabilidades; v3.0 con el motor de `vendor/` idéntico al
+  fixture. Latencia del residuo: p95 0,25 ms.
+- Alcance: staging, detrás del flag. Producción espera la decisión de Mateo
+  ([docs/HANDOFF-deploy-prod-ft-v1.1.md](docs/HANDOFF-deploy-prod-ft-v1.1.md)).
 
 ## rerank-v1.1.0 — no publicado (2026-10-05)
 

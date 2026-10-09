@@ -1,0 +1,31 @@
+{
+  "name": "ft-v1.1-confirmed",
+  "release": "ft-v1.1.0",
+  "flag": "FT_V11_ENABLED",
+  "base_model": {
+    "release": "model-v3.0.0",
+    "asset": "genphenia-v3.0.tar.gz",
+    "sha256": "2201b7f2868afaf00439f76a6197bcf1d94eccc5ea171173719ca48c517a61c8"
+  },
+  "files": {
+    "ft_prod.py": {
+      "sha256": "054893684cfda65d7ddbc835f5c1baa45bb159690e98ca14bf192e2ebaaea63d"
+    },
+    "ft-v1.1-confirmed-bundle.json.gz": {
+      "format": "ft-v1.1-prod-bundle/1",
+      "sha256": "6bb6bb40d85a815c3bf8fb467cbfa9c32d34164ced280eb96d4f4228ddeee6c4"
+    }
+  },
+  "tests_only": {
+    "parity-fixture.json.gz": {
+      "sha256": "440580df3c8e039965e3fb2b7e8f756de691e30111769a1fba47e4002ad37b0d"
+    }
+  },
+  "source": {
+    "repo": "https://github.com/MateAlv/diagnostic.ar-training.git",
+    "commit": "0b189f7",
+    "path": "dist/ft-v1.1-confirmed",
+    "handoff": "docs/HANDOFF-ft-v1.1-prod.md",
+    "decision": "docs/decisions/0018-ft-v11-production-ready.md"
+  }
+}
