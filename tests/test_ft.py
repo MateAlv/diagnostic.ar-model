@@ -182,7 +182,8 @@ def test_the_engine_gives_the_fixture_logits_distribution(v3, model, fixture):
         if rank(out, case["gene_index"]) != case["rank_expected"]:
             rank_mismatch.append(f"{case['case_id']} (ft)")
     print(f"\nengine vs fixture: max |dp| {worst:.2e}, rank mismatches {len(rank_mismatch)}")
-    assert worst <= 1e-6
+    # float32 ONNX kernels differ across CPUs: GitHub's runners give 8e-6 where the fixture's machine gave < 1e-6.
+    assert worst <= 2e-5
     assert not rank_mismatch, rank_mismatch[:10]
 
 
