@@ -1,9 +1,30 @@
 # Changelog
 
-Cada versión publicada del modelo lleva un tag `model-vX.Y.Z`, y cada re-ranker un
+Cada versión publicada del modelo lleva un tag `model-vX.Y.Z` (v4: red + capa), y cada re-ranker un
 tag `rerank-vX.Y.Z` y cada residuo de la Fase 2 un tag `ft-vX.Y.Z`, con una entrada acá con las métricas de evaluación y el
 experimento del que sale. Los embeddings de HPO del extractor de síntomas llevan su
 propio tag, `hpo-embeddings-vX.Y.Z` (ver README).
+
+## model-v4.0.0 — 2026-10-15 (pre-release)
+
+GenPhenia v4 (F3): la red v4, con la arquitectura de v3.0 reentrenada y ajustada con 4.369 pacientes reales y el
+conocimiento de v3.0, más la capa v4 (add-on que solo baja genes por sexo y edad de inicio, y regla dura de sexo).
+Sin sexo, edad ni edad de inicio, la salida es la de la red v4. Nota de release: [docs/model-v4.0.md](docs/model-v4.0.md).
+
+- Assets, reproducibles:
+  - `genphenia-v4.0.tar.gz`, sha256 `62b2c5e8eb4609d1003a81c3632ea82cf2b1173f4ffc646a02ecb66d38d95cc3`
+    (`scripts/package_bundle.sh`);
+  - `v4-layer.tar.gz`, sha256 `80d1b159472b5730cfa57f3c636c864c854c820be0c2ee740f67e68c2f399df9`
+    (`scripts/package_v4_layer.sh`).
+- Archivos: `models/v4/v4-layer/`, de diagnostic.ar-training@801fa85 (`dist/v4-layer/`), sin cambios. `v4.json` fija
+  los sha256.
+- Evidencia: ADR-0020 de diagnostic.ar-training.
+  - Bóveda (EXP-V-002, lectura única, 2.678 pacientes no citados): Δ MRR acotado +0,065 [+0,047, +0,083] vs v3.0. El
+    gen correcto queda primero en el 16,0% (v3.0: 11,7%).
+  - Segunda lectura de CONFIRM (F3): +0,072 [+0,033, +0,120]; regla de sexo 31 ayudados y 0 perjudicados.
+- El motor sigue informando "3.0" (la arquitectura). Conservar el `model.onnx` publicado.
+- Alcance: pre-release. La integración en el servicio, staging y producción esperan el handoff
+  (`docs/HANDOFF-v4-prod.md` de diagnostic.ar-training) y el visto bueno de Mateo.
 
 ## ft-v1.1.0 — 2026-10-09
 
