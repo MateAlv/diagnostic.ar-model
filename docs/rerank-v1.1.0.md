@@ -170,7 +170,7 @@ scripts/package_bundle.sh models/rerank/rerank-v1.1 dist/
 
 1. **Etiquetar y publicar** solo con el OK de Mateo. Los comandos están en el
    PR.
-2. **Staging:** [HANDOFF-deploy-staging-rerank-v1.1.md](HANDOFF-deploy-staging-rerank-v1.1.md).
+2. **Staging:** primero en staging, detrás del flag.
    Producción más adelante, por la imagen fijada; sin modo sombra.
 3. **Uso:**
    ```python

@@ -1,10 +1,8 @@
 name: Tests
 
-# The package tests, with v3.0 itself: the published model-v3.0.0 bundle is
-# downloaded with this repository's own token and checked against its sha256,
-# so the engine-backed parity, identity and latency tests run instead of
-# skipping. The re-ranker bundles are built from diagnostic.ar-training and
-# are not committed, so their tests skip here.
+# The package tests. The model-v3.0.0 bundle is not public, so the tests that
+# need it (engine-backed parity, identity and latency) skip here, like the
+# re-ranker tests, whose bundles are built from diagnostic.ar-training.
 
 on:
   pull_request:
@@ -28,12 +26,4 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -e '.[test]'
-      - name: Fetch model-v3.0.0
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh release download model-v3.0.0 --repo "$GITHUB_REPOSITORY" --pattern genphenia-v3.0.tar.gz --dir /tmp/v3
-          echo "2201b7f2868afaf00439f76a6197bcf1d94eccc5ea171173719ca48c517a61c8  /tmp/v3/genphenia-v3.0.tar.gz" | sha256sum -c
-          mkdir -p models/base
-          tar -xzf /tmp/v3/genphenia-v3.0.tar.gz -C models/base
       - run: python -m pytest -q -s -rs

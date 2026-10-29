@@ -45,8 +45,7 @@ a bit. Nota de release: [docs/ft-v1.1.md](docs/ft-v1.1.md).
 - Paridad con el fixture (207 casos): máximo |Δp| 1,5e-20 desde logits y
   5,6e-16 desde probabilidades; v3.0 con el motor de `vendor/` idéntico al
   fixture. Latencia del residuo: p95 0,25 ms.
-- Alcance: staging, detrás del flag. Producción espera la decisión de Mateo
-  ([docs/HANDOFF-deploy-prod-ft-v1.1.md](docs/HANDOFF-deploy-prod-ft-v1.1.md)).
+- Alcance: staging, detrás del flag. Producción espera la decisión de Mateo.
 
 ## rerank-v1.1.0 — no publicado (2026-10-05)
 
